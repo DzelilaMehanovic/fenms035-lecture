@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Select2</title>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+<body>
+    
+<div style = "margin-top:10%; margin-left:10%">
+    Basic select
+    <select id="basic">
+        <option value="JAN">January</option>
+        <option value="FEB">February</option>
+        <option value="MAR">March</option>
+        <option value="APR">April</option>
+        <option value="MAY">May</option>
+        <option value="JUN">June</option>
+        <option value="JUL">July</option>
+        <option value="AUG">August</option>
+        <option value="SEP">September</option>
+        <option value="OCT">October</option>
+        <option value="NOV">November</option>
+        <option value="DEC">December</option>
+    </select>
+  
+    <br/><br/><br/>
+  
+      <!-- <div></div> -->
+    Select2
+    <select id="select2_element"  style="width: 400px">
+        <option value="JAN">January</option>
+        <option value="FEB">February</option>
+        <option value="MAR">March</option>
+        <option value="APR">April</option>
+        <option value="MAY">May</option>
+        <option value="JUN">June</option>
+        <option value="JUL">July</option>
+        <option value="AUG">August</option>
+        <option value="SEP">September</option>
+        <option value="OCT">October</option>
+        <option value="NOV">November</option>
+        <option value="DEC">December</option>
+    </select>
+  
+    <br/><br/><br/>
+    Color:
+    <select class="colors" style="width:400px;"></select>
+  </div>
+</body>
+<script type="text/javascript">
+  $('#select2_element').select2({
+    placeholder: "Select month",
+    multiple: "multiple",
+  });
+
+  let colors = [{
+     id:'ORANGE',
+     text: 'orange'
+    },
+    {
+      id: 'BLUE',
+      text: 'blue'
+  }];
+
+  $('.colors').select2({
+    placeholder: "Select color",
+    data: colors,
+    multiple: true
+  });
+</script>

@@ -1,0 +1,13 @@
+h1, p {
+    color: red;
+}
+
+#testQuery {
+    color: blue
+}
+@media screen and (min-width: 1200px) {
+    #testQuery {
+        color: green
+    }
+}
+
