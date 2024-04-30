@@ -18,6 +18,7 @@
               <th>Office</th>
               <th>Start date</th>
               <th>Salary</th>
+              <th>Info</th>
           </tr>
       </thead>
       <tbody id="table-body">
@@ -530,10 +531,11 @@
              "<td>"+dataSet[i][2]+"</td>"+
              "<td>"+dataSet[i][3]+"</td>"+
              "<td>"+dataSet[i][4]+"</td>"+
+             '<td><button onClick="showName(dataSet['+i+'])">Test</button></td>'+
              "</tr>"
     }
     $("#table-body").html(html)
-    $('#example').DataTable( {
+  /*  $('#example').DataTable( {
         data: dataSet,
         columns: [
             { title: "Name" },
@@ -542,9 +544,14 @@
             { title: "Extn." },
             { title: "Start date" },
             { title: "Salary" },
-            { title: "Actions" }
+            { title: "Actions" },
+            { title: "Name info" }
         ],
         "pageLength": 15,
         "lengthMenu": [2, 5, 10, 15, 25, 50, "All"]
     });
+*/
+    function showName(data){
+        console.log(data)
+    }
 </script>
