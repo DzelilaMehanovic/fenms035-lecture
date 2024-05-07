@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>AJAX & JSON</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <!--Datatable CSS-->
+        <link href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.min.css" rel="stylesheet">
+        <!-- Toastr -->
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <!-- jQuery BlockUI -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
+        <!--Datatable JS-->
+        <script src=https://cdn.datatables.net/2.0.3/js/dataTables.min.js></script>
+        <!-- Toastr -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>AJAX & JSON</h1>
+            <!--Table-->
+            <table id="students"></table>
+            <!-- Modal -->
+            <div class="modal" id="editModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit Student</h5>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editForm">
+                                <div class="form-group">
+                                    <label for="name">Name:</label>
+                                    <input type="text" class="form-control" id="name" name="name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email:</label>
+                                    <input type="email" class="form-control" id="email" name="email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password:</label>
+                                    <input type="password" class="form-control" id="password" name="password">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="closeModal()">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="countries"></div>
+    </body>
+    <script>
+       fetchStudentsFromFile()
+       function fetchStudentsFromFile() {
+        $.ajax({
+            url: '/fenms035-lecture/students.json', // Replace 'data.json' with the path to your JSON file
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                console.log(data)
+               /*let html = "<tr><th>Name</th><th>Email</th><th>Password</th><th>Actions</th></tr>";
+                data.forEach(element => {
+                    html+='<tr><td>'+element.name+'</td><td>'+element.email+'</td><td>'+element.password+'</td>'+
+                          '<td><button onclick=openEditModal('+element.id+')>Edit</button></td></tr>';
+                });
+                $("table#students").html(html)*/         
+                $("table#students").DataTable({
+                    data: data, 
+                    columns: [
+                        { data: 'name', title: 'Name' },
+                        { data: 'email', title: 'Email' }, 
+                        { data: 'password', title: 'Password' },
+                        {
+                        title: 'Action',
+                            render: function (data, type, row, meta) {
+                                return '<button class="btn btn-primary" onclick="openEditModal(\'' + row.id + '\')">Edit Student</button>';
+                            }
+                        }
+                    ]
+                })
+                console.log('Data from file:', data);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching data from file:', error);
+            }
+        });
+    }
+
+    function getStudentById(id){
+        $.ajax({
+            url: '/fenms035-lecture/student_' + id + '.json',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                console.log('Data for student ' + id)
+                console.log(data)
+                $('input[name="name"]').val(data.name)
+                $('input[name="email"]').val(data.email)
+                $('input[name="password"]').val(data.password)
+                
+                $.unblockUI();
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching data from file:', error);
+                $.unblockUI();
+            }
+        });
+    }
+
+    function openEditModal(id) {
+        console.log(id)
+        toastr.success('You clicked Success toast');
+        $.blockUI({ message: '<h3>Processing...</h3>' });
+        $('#editModal').show();
+        getStudentById(id)   
+    }
+
+    function closeModal(){
+        $('#editModal').hide();
+    }
+
+    
+    $.ajax({
+        url: 'https://restcountries.com/v3.1/all', // Replace 'data.json' with the path to your JSON file
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data)
+            let html = ""
+            data.forEach(element => {
+                html += element.name.common + '<br/>'
+            });
+            $("#countries").html(html);
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching data from file:', error);
+        }
+    });
+
+    $.ajax({
+        url: 'https://restcountries.com/v3.1/name/Bosnia and Herzegovina', // Replace 'data.json' with the path to your JSON file
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data) 
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching data from file:', error);
+        }
+    });
+    </script>
+
+</html>
