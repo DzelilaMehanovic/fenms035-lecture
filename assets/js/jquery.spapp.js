@@ -7,7 +7,6 @@
     config = $.extend(
       {
         defaultView  : $("main#spapp > section:last-child").attr("id"),
-        ,
         templateDir: "./tpl/",
         pageNotFound: false,
       },
