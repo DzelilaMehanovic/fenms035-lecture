@@ -22,6 +22,11 @@ $(document).ready(function () {
     load: "select2.html",
   });
 
+  app.route({
+    view: "view_more",
+    load: "view_more.html",
+  });
+
   // run app
   app.run();
 });

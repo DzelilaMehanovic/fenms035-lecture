@@ -56,7 +56,8 @@ let StudentService = {
                 {
                 title: 'Action',
                     render: function (data, type, row, meta) {
-                        return '<button class="btn btn-primary" onclick="StudentService.openEditModal(\'' + row.id + '\')">Edit Student</button>';
+                        return '<div><button class="btn btn-primary" onclick="StudentService.openEditModal(\'' + row.id + '\')">Edit Student</button><br/>'+
+                        '<button class="btn btn-primary" onclick="StudentService.openViewMore(\'' + row.id + '\')">View More</button></div>';
                     }
                 }
             ], data, 10);
@@ -112,7 +113,9 @@ let StudentService = {
     getStudentById : function(id) {
         RestClient.get('student_' + id + '.json', function (data) {
             console.log('Data for student ' + id)
+            delete data.password
             console.log(data)
+            localStorage.setItem('selected_student', JSON.stringify(data))
             $('input[name="name"]').val(data.name)
             $('input[name="email"]').val(data.email)
             $('input[name="password"]').val(data.password)
@@ -150,6 +153,17 @@ let StudentService = {
         $('#editModal').show();
         StudentService.getStudentById(id)  
     }, 
+
+    openViewMore : function(id) {
+        StudentService.getStudentById(id) 
+        window.location.replace("#view_more");
+    },
+
+    populateViewMore : function(){
+        let selected_student = JSON.parse(localStorage.getItem('selected_student'))
+        $("#name").text(selected_student.name)
+        $("#email").text(selected_student.email)
+    },
 
     closeModal : function() {
         $('#editModal').hide();
